@@ -8,11 +8,8 @@ import task
 app = Flask(__name__)
 
 @app.route("/")
-def hello():
-    name = request.args.get('name', 'John doe')
-    result = task.hello.delay(name)
-    result.wait()
-    return render_template('index.html', celery=result)
+def index():
+    return render_template('index.html')
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
