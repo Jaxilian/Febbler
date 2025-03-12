@@ -7,10 +7,17 @@ import task
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+
+uri = os.environ.get("DATABASE_URL")
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+    
+app.config["SQLALCHEMY_DATABASE_URI"] = uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
+
 
 @app.before_first_request
 def create_tables():
