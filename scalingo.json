@@ -1,0 +1,5 @@
+{
+    "scripts": {
+      "postdeploy": "flask db upgrade"
+    }
+  }
