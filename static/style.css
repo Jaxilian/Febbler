@@ -1,14 +1,23 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
   }
-  
-  .container {
+
+.febbler-title{
+  text-align: center;
+}
+
+.content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:100%; 
+  margin:0;
+  overflow-y: auto;
+}
+
+.container {
     background: #fff;
     padding: 2rem;
     border-radius: 5px;

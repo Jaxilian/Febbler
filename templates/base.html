@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    
+    <div>
+        <h1 class ="febbler-title">Febbler</h1>
+    </div>
+
+    {% block content %}{% endblock %}
+
+  </body>
+</html>

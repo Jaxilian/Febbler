@@ -4,7 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 
-import task
+RUN_LOCAL = True
+if not RUN_LOCAL:
+    import task
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  
@@ -17,12 +19,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = uri
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-
-
-
-@app.before_request
-def create_tables():
-    db.create_all()
 migrate = Migrate(app, db)
 
 class User(db.Model):
@@ -36,7 +32,9 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
+def print_msg(msg):
+    session.pop('_flashes', None)
+    flash(msg)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -44,13 +42,13 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         if User.query.filter_by(username=username).first():
-            flash("Username already exists!")
+            print_msg("Username already exists!")
             return redirect(url_for("register"))
         new_user = User(username=username)
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
-        flash("Registration successful!")
+        print_msg("Registration successful!")
         return redirect(url_for("login"))
     return render_template("register.html")
 
@@ -62,16 +60,16 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             session["user_id"] = user.id
-            flash("Logged in successfully!")
+            print_msg("Logged in successfully!")
             return redirect(url_for("index"))
-        flash("Invalid credentials!")
+        print_msg("Invalid credentials!")
         return redirect(url_for("login"))
     return render_template("login.html")
 
 @app.route("/logout")
 def logout():
     session.pop("user_id", None)
-    flash("Logged out.")
+    print_msg("Logged out.")
     return redirect(url_for("login"))
 
 @app.route("/")
